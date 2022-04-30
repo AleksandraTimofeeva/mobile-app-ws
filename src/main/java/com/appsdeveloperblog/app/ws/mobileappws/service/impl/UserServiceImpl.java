@@ -8,6 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -20,8 +22,9 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(user, userEntity);
 
         userEntity.setEncryptedPassword("test");
-        userEntity.setUserId("testUser");
-
+        userEntity.setUserId("testUserId");
+//        Iterable<UserEntity> testUserEntity = userRepository.findAll();
+//        System.out.println(testUserEntity);
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
         UserDto returnValue = new UserDto();

@@ -1,9 +1,6 @@
 package com.appsdeveloperblog.app.ws.mobileappws.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity(name="users")
@@ -12,7 +9,7 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 9183928463768887084L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -30,10 +27,10 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String encryptedPassword;
 
-    private String emailVerification;
+    private String emailVerificationToken;
 
     @Column(nullable = false)
-    private boolean emailVerificationStatus = false;
+    private Boolean emailVerificationStatus = false;
 
     public long getId() {
         return id;
@@ -83,12 +80,12 @@ public class UserEntity implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public String getEmailVerification() {
-        return emailVerification;
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
     }
 
-    public void setEmailVerification(String emailVerification) {
-        this.emailVerification = emailVerification;
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
     }
 
     public Boolean getEmailVerificationStatus() {
@@ -98,4 +95,7 @@ public class UserEntity implements Serializable {
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
     }
+
+
+    ;
 }

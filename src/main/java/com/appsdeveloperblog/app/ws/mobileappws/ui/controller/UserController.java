@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("users") // http://localhost:8080/users
+@RequestMapping("/users") // http://localhost:8080/users
 public class UserController {
 
     @Autowired
@@ -24,7 +24,6 @@ public class UserController {
     @PostMapping
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails)
     {
-        System.out.println("Post");
         UserRest returnValue = new UserRest();
 
         UserDto userDto = new UserDto();
