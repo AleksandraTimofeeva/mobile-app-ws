@@ -1,0 +1,1 @@
+liquibase --driver=com.mysql.Driver --classpath="C:\Program Files (x86)\MySQL\Connector J 8.0" --changeLogFile=changelog-master.xml --url="jdbc:mysql://localhost:3306/photo_app" --username=aleksandra --password=aleksandra update
