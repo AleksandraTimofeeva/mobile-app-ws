@@ -34,4 +34,9 @@ http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="Add new table into USERS table" author="aleksandra">
+        <addColumn tableName="USERS">
+            <column name="address" type="VARCHAR(50)"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
