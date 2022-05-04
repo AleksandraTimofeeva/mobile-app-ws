@@ -3,8 +3,9 @@ package com.appsdeveloperblog.app.ws.mobileappws.service.impl;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 
+import com.appsdeveloperblog.app.ws.mobileappws.entity.UserEntity;
+import com.appsdeveloperblog.app.ws.mobileappws.repository.UserRepository;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -14,63 +15,108 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
-/**
- * Sample Java program that imports data from an Excel file to MySQL database.
- *
- * @author Nam Ha Minh - https://www.codejava.net
- *
- */
 @Component
 public class ReadExcelFileDemo implements ApplicationListener<ApplicationStartedEvent> {
 
     private final DataSource dataSource;
+    private final UserRepository userRepository;
 
-    public ReadExcelFileDemo(DataSource dataSource) {
+    public ReadExcelFileDemo(DataSource dataSource, UserRepository userRepository) {
         this.dataSource = dataSource;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
-/*        String jdbcURL = "jdbc:mysql://localhost:3306/photo_app";
-        String username = "root";
-        String password = "root";*/
-
-        registerUserFromExcelJDBC();
+//        registerUserFromExcelJDBC();
+        registerUserFromExcelJPA();
     }
 
     private void registerUserFromExcelJPA() {
+        String excelFilePath = "C:\\dev\\edu\\Java\\mobile-app-ws\\src\\main\\resources\\excel\\Users.xlsx";
+        String[] HEADERs = { "id", "user_id", "first_name", "last_name", "email, encrypted_password", "email_verification_token", "email_verification_status"};
 
+        try {
+            long start = System.currentTimeMillis();
+            FileInputStream inputStream = new FileInputStream(excelFilePath);
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            Sheet firstSheet = workbook.getSheet("Tabelle1");
+            Iterator<Row> rowIterator = firstSheet.iterator();
+            List<UserEntity> users = new ArrayList<UserEntity>();
+
+            int count = 0;
+            rowIterator.next(); // skip the header row
+            while (rowIterator.hasNext()) {
+                Row nextRow = rowIterator.next();
+                Iterator<Cell> cellIterator = nextRow.cellIterator();
+                UserEntity userEntity = new UserEntity();
+
+                while (cellIterator.hasNext()) {
+                    Cell nextCell = cellIterator.next();
+
+                    int columnIndex = nextCell.getColumnIndex();
+
+                    switch (columnIndex) {
+                        case 0:
+                            userEntity.setId((int) nextCell.getNumericCellValue());
+                            break;
+                        case 1:
+                            userEntity.setUserId(nextCell.getStringCellValue());
+                            break;
+                        case 2:
+                            userEntity.setFirstName(nextCell.getStringCellValue());
+                            break;
+                        case 3:
+                            userEntity.setLastName(nextCell.getStringCellValue());
+                            break;
+                        case 4:
+                            userEntity.setEmail(nextCell.getStringCellValue());
+                            break;
+                        case 5:
+                            userEntity.setEncryptedPassword(nextCell.getStringCellValue());
+                            break;
+                        case 6:
+                            userEntity.setEmailVerificationToken(nextCell.getStringCellValue());
+                            break;
+                        case 7:
+                            userEntity.setEmailVerificationStatus(Boolean.valueOf(nextCell.getStringCellValue()));
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                users.add(userEntity);
+            }
+
+            workbook.close();
+            userRepository.saveAll(users);
+
+            long end = System.currentTimeMillis();
+            System.out.printf("Import done in %d ms\n", (end - start));
+
+        } catch (IOException ex1) {
+            System.out.println("Error reading file");
+            ex1.printStackTrace();
+        }
     }
-
 
     private void registerUserFromExcelJDBC() {
         String excelFilePath = "C:\\dev\\edu\\Java\\mobile-app-ws\\src\\main\\resources\\excel\\Users.xlsx";
-
         int batchSize = 20;
-
         try {
-
             Connection connection = dataSource.getConnection();
-
             long start = System.currentTimeMillis();
-
             FileInputStream inputStream = new FileInputStream(excelFilePath);
-
             Workbook workbook = new XSSFWorkbook(inputStream);
-
             Sheet firstSheet = workbook.getSheet("Tabelle1");
             Iterator<Row> rowIterator = firstSheet.iterator();
-
             connection.setAutoCommit(false);
-
             String sql = "INSERT INTO users (id, user_id, first_name, last_name, email, encrypted_password, email_verification_token, email_verification_status, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-
             int count = 0;
-
             rowIterator.next(); // skip the header row
-
             while (rowIterator.hasNext()) {
                 Row nextRow = rowIterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -148,4 +194,11 @@ public class ReadExcelFileDemo implements ApplicationListener<ApplicationStarted
             ex2.printStackTrace();
         }
     }
+
+//    public static boolean hasExcelFormat(MultipartFile file) {
+//        if (!TYPE.equals(file.getContentType())) {
+//            return false;
+//        }
+//        return true;
+//    }
 }

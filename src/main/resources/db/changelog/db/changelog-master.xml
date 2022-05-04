@@ -39,16 +39,16 @@ http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
 <!--            <column name="address" type="VARCHAR(50)"></column>-->
 <!--        </addColumn>-->
 <!--    </changeSet>-->
-    <changeSet id="1646229421338-4" author="aleksandra">
-        <update tableName="USERS">
-            <column name="first_name" value="ExampleFirstName"/>
-            <where>first_name='Bob'</where>
-        </update>
-    </changeSet>
-    <changeSet id="1646229421338-5" author="aleksandra">
-        <update tableName="USERS">
-            <column name="first_name" value="ExampleFirstName"/>
-            <where>first_name='aleksandra1'</where>
-        </update>
-    </changeSet>
+<!--    <changeSet id="1646229421338-4" author="aleksandra">-->
+<!--        <update tableName="USERS">-->
+<!--            <column name="first_name" value="ExampleFirstName"/>-->
+<!--            <where>first_name='Bob'</where>-->
+<!--        </update>-->
+<!--    </changeSet>-->
+<!--    <changeSet id="1646229421338-5" author="aleksandra">-->
+<!--        <update tableName="USERS">-->
+<!--            <column name="first_name" value="ExampleFirstName"/>-->
+<!--            <where>first_name='aleksandra1'</where>-->
+<!--        </update>-->
+<!--    </changeSet>-->
 </databaseChangeLog>

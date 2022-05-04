@@ -1,7 +1,11 @@
 spring:
   liquibase:
     change-log: classpath:db/changelog/db/changelog-master.xml
+    url: jdbc:mysql://localhost:3306/photo_app?createDatabaseIfNotExist=true
+    user: aleksandra
+    password: aleksandra
+
   datasource:
     username: aleksandra
     password: aleksandra
-    url: jdbc:mysql://localhost:3306/photo_app
+    url: jdbc:mysql://localhost:3306/photo_app?createDatabaseIfNotExist=true

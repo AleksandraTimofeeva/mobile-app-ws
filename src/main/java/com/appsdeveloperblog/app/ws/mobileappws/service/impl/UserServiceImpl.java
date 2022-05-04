@@ -32,4 +32,8 @@ public class UserServiceImpl implements UserService {
 
         return returnValue;
     }
+
+    public void save() {
+
+    }
 }
